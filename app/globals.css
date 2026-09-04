@@ -1,0 +1,118 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/vazirmatn";
+
+/* ==========================================================================
+   SITRIN design tokens — این‌ها باید دقیقاً با content/site-config.json
+   (کلید theme) هماهنگ بمانند. اگر این رنگ‌ها عوض شدند، آن فایل را هم به‌روز
+   کنید تا مستندات با واقعیت یکی بماند.
+   ========================================================================== */
+@theme {
+  --color-canvas: #030303;
+  --color-surface: #111010;
+  --color-surface-sunken: #0b0a0a;
+  --color-border: #2c2a29;
+  --color-ink: #fcfbfa;
+  --color-muted: #a9a09e;
+  --color-brand: #c61e1c;
+  --color-brand-hover: #d26660;
+  --color-brand-muted: #640e0e;
+
+  --font-sans: "Vazirmatn Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-sitrin-rise: sitrin-rise 0.7s ease both;
+  --animate-sitrin-marquee: sitrin-marquee 26s linear infinite;
+  --animate-sitrin-glow: sitrin-glow 3s ease-in-out infinite;
+  --animate-sitrin-float: sitrin-float 5s ease-in-out infinite;
+  @keyframes sitrin-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes sitrin-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes sitrin-glow {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleX(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleX(1.08);
+    }
+  }
+   @keyframes sitrin-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--color-brand);
+    color: var(--color-ink);
+  }
+
+  ::-webkit-scrollbar {
+    height: 6px;
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-sunken);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* حذف spinner پیش‌فرض مرورگر روی اینپوت‌های عددی (کد پستی، تعداد و ...) */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    appearance: textfield;
+  }
+}
+
+/* فونت Archivo Black فقط برای وردمارک لاتین SITRIN — از next/font/google در
+   app/layout.tsx به‌صورت متغیر CSS تزریق می‌شود. */
+@layer utilities {
+  .font-wordmark {
+    font-family: var(--font-archivo-black), sans-serif;
+  }
+}
