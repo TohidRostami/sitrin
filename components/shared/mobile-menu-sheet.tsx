@@ -29,7 +29,7 @@ export function MobileMenuSheet({
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-canvas/70 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0" />
         <DialogPrimitive.Content className="fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col bg-surface-sunken shadow-2xl data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right">
           <div className="flex flex-shrink-0 items-center justify-between border-b border-border px-5 py-5">
-            <Logo size="sm" />
+            <Logo />
             <DialogPrimitive.Close className="text-lg text-muted">
               <X className="h-5 w-5" />
               <span className="sr-only">بستن</span>
@@ -97,21 +97,31 @@ export function MobileMenuSheet({
           </nav>
 
           <div className="flex-shrink-0 px-5 pb-6 pt-4">
-            {!session ? (
+            {session?.user.role === "ADMIN" ||
+            session?.user.role === "SUBADMIN" ? (
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/account"
+                  onClick={() => setOpen(false)}
+                  className="mb-3 flex h-[46px] items-center justify-center rounded-[13px] border border-border text-[13.5px] font-bold"
+                >
+                  حساب کاربری
+                </Link>
+                <Link
+                  href="/admin"
+                  onClick={() => setOpen(false)}
+                  className="mb-3 flex h-[46px] items-center justify-center rounded-[13px] border border-border text-[13.5px] font-bold"
+                >
+                  ورود به پنل ادمین
+                </Link>
+              </div>
+            ) : (
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
                 className="mb-3 flex h-[46px] items-center justify-center rounded-[13px] border border-border text-[13.5px] font-bold"
               >
-                ورود / ثبت‌نام
-              </Link>
-            ) : (
-              <Link
-                href="/account"
-                onClick={() => setOpen(false)}
-                className="mb-3 flex h-[46px] items-center justify-center rounded-[13px] border border-border text-[13.5px] font-bold"
-              >
-                حساب کاربری
+                ورود به حساب کاربری
               </Link>
             )}
             <p className="text-center text-[11px] text-muted">

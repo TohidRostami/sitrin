@@ -9,6 +9,7 @@ import { RatingStars } from "@/components/shared/rating-stars";
 import { QuantityStepper } from "@/components/shared/quantity-stepper";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { formatNumber } from "@/lib/format";
 import { useCartStore } from "@/lib/cart-store";
 import { useFavoritesStore } from "@/lib/favorites-store";
 
@@ -24,13 +25,13 @@ type Img = { url: string; alt: string | null; colorId: string | null };
 
 export function ProductPurchasePanel({
   product,
-  description,
   images,
   colors,
   sizeOptions,
   variants,
   ratingAverage,
   ratingCount,
+  description,
 }: {
   product: {
     id: string;
@@ -40,13 +41,13 @@ export function ProductPurchasePanel({
     compareAtPrice: number | null;
     code: string;
   };
-  description: string;
   images: Img[];
   colors: Color[];
   sizeOptions: SizeOption[];
   variants: Variant[];
   ratingAverage: number;
   ratingCount: number;
+  description: string;
 }) {
   const [colorId, setColorId] = useState<string | null>(colors[0]?.id ?? null);
   const [sizeId, setSizeId] = useState<string | null>(null);
@@ -64,6 +65,31 @@ export function ProductPurchasePanel({
       ),
     [variants, sizeId, colorId, colors.length],
   );
+
+  // موجودی هر سایز مخصوصِ رنگ فعلاً انتخاب‌شده — نه موجودیِ کلی محصول.
+  const sizeAvailability = useMemo(() => {
+    const map = new Map<string, boolean>();
+    for (const s of sizeOptions) {
+      const inStock = variants.some(
+        (v) =>
+          v.sizeId === s.id &&
+          (colors.length === 0 || v.colorId === colorId) &&
+          v.stock > 0,
+      );
+      map.set(s.id, inStock);
+    }
+    return map;
+  }, [sizeOptions, variants, colorId, colors.length]);
+
+  function handleSelectColor(id: string) {
+    setColorId(id);
+    setSizeId(null); // سایزِ رنگ قبلی لزوماً برای رنگ جدید معتبر نیست
+  }
+
+  function handleSelectSize(id: string) {
+    setSizeId(id);
+    setQuantity(1); // تعداد مال سایز قبلی دیگه برای سایز جدید معتبر نیست
+  }
 
   const needsSize = sizeOptions.length > 0;
   const canAdd =
@@ -141,7 +167,7 @@ export function ProductPurchasePanel({
               {colors.map((c) => (
                 <button
                   key={c.id}
-                  onClick={() => setColorId(c.id)}
+                  onClick={() => handleSelectColor(c.id)}
                   className={cn(
                     "h-[38px] w-[38px] rounded-full ring-2 ring-offset-2 ring-offset-canvas transition-all",
                     colorId === c.id ? "ring-ink" : "ring-border",
@@ -160,27 +186,51 @@ export function ProductPurchasePanel({
               <span className="text-[13px] font-bold">سایز</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {sizeOptions.map((s) => (
-                <button
-                  key={s.id}
-                  disabled={!s.inStock}
-                  onClick={() => setSizeId(s.id)}
-                  className={cn(
-                    "flex h-[46px] min-w-[52px] items-center justify-center rounded-xl border px-2 text-sm font-bold transition-colors",
-                    !s.inStock &&
-                      "cursor-not-allowed border-border text-muted/40 line-through",
-                    s.inStock &&
-                      sizeId === s.id &&
-                      "border-brand bg-brand/[0.14] text-brand-hover",
-                    s.inStock &&
-                      sizeId !== s.id &&
-                      "border-border hover:border-brand",
-                  )}
-                >
-                  {s.name}
-                </button>
-              ))}
+              {sizeOptions.map((s) => {
+                const inStock = sizeAvailability.get(s.id) ?? false;
+                return (
+                  <button
+                    key={s.id}
+                    disabled={!inStock}
+                    onClick={() => handleSelectSize(s.id)}
+                    className={cn(
+                      "relative flex h-[46px] min-w-[52px] items-center justify-center overflow-hidden rounded-xl border px-2 text-sm font-bold transition-colors",
+                      !inStock &&
+                        "cursor-not-allowed border-border text-muted/40",
+                      inStock &&
+                        sizeId === s.id &&
+                        "border-brand bg-brand/[0.14] text-brand-hover",
+                      inStock &&
+                        sizeId !== s.id &&
+                        "border-border hover:border-brand",
+                    )}
+                  >
+                    {s.name}
+                    {!inStock && (
+                      <span
+                        className="pointer-events-none absolute left-[-8px] top-1/2 h-[1px] w-[calc(100%+16px)] -translate-y-1/2 -rotate-45 bg-muted/60"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
+
+            {sizeId && selectedVariant && (
+              <p
+                className={cn(
+                  "mt-2.5 text-xs",
+                  selectedVariant.stock <= 3
+                    ? "text-brand-hover"
+                    : "text-muted",
+                )}
+              >
+                {selectedVariant.stock <= 3
+                  ? `فقط ${formatNumber(selectedVariant.stock)} عدد در انبار باقی مانده`
+                  : `${formatNumber(selectedVariant.stock)} عدد در انبار موجود است`}
+              </p>
+            )}
           </div>
         )}
 

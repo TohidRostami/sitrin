@@ -64,7 +64,7 @@ export function CategoriesCarousel({
         </Link>
       </div>
 
-      <div ref={emblaRef} className="mt-6 py-2 overflow-hidden">
+      <div ref={emblaRef} className="mt-6 overflow-hidden py-2">
         <div className="flex -ml-4">
           {categories.map((cat) => (
             <div
@@ -75,12 +75,29 @@ export function CategoriesCarousel({
                 href={`/shop?category=${cat.slug}`}
                 className="group block overflow-hidden rounded-[18px] border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-brand"
               >
-                <div className="relative h-[118px] bg-surface-sunken">
-                  <ProductImage src={cat.image} alt={cat.title} />
-                </div>
+                <div className="relative h-[190px] w-full overflow-hidden bg-surface-sunken">
+                  {/* Category image */}
+                  <ProductImage
+                    src={cat.image}
+                    alt={cat.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
 
-                <div className="flex items-center justify-between px-4 py-3.5">
-                  <span className="text-sm font-bold">{cat.title}</span>
+                  {/* Bottom gradient for text readability */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
+
+                  {/* Category name */}
+                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-3">
+                    <span
+                      className="text-center text-base font-bold text-white"
+                      style={{
+                        textShadow:
+                          "0 2px 4px rgba(80, 80, 80, 0.9), 0 4px 10px rgba(80, 80, 80, 0.6)",
+                      }}
+                    >
+                      {cat.title}
+                    </span>
+                  </div>
                 </div>
               </Link>
             </div>

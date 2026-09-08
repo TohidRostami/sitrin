@@ -130,7 +130,7 @@ export function JalaliDatePicker({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={6}
-          className="z-50 w-72 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-md"
+          className="z-50 w-72 rounded-lg border border-border bg-surface-sunken p-3 text-popover-foreground shadow-md"
         >
           <div className="flex items-center justify-between pb-2">
             <button

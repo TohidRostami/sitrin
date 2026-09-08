@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouteTransition } from "@/components/shared/route-transition-provider";
 import {
   Select,
   SelectTrigger,
@@ -18,7 +18,7 @@ const OPTIONS = [
 ];
 
 export function SortSelect({ current }: { current: ShopSearchParams }) {
-  const router = useRouter();
+  const { push } = useRouteTransition();
 
   return (
     <div className="hidden sm:flex items-center gap-2.5">
@@ -28,7 +28,7 @@ export function SortSelect({ current }: { current: ShopSearchParams }) {
       <Select
         value={current.sort || "newest"}
         onValueChange={(value) =>
-          router.push(buildShopHref(current, { sort: value }))
+          push(buildShopHref(current, { sort: value }))
         }
       >
         <SelectTrigger

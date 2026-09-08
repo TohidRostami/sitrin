@@ -8,15 +8,15 @@ import { listActiveHeroImages } from "@/lib/queries/settings";
 export async function Hero() {
   const [heroImages] = await Promise.all([listActiveHeroImages()]);
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section className="relative overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 80% at 20% 0%, #640E0E 0%, transparent 55%), radial-gradient(90% 70% at 90% 100%, #1a0808 0%, transparent 60%)",
+            "radial-gradient(120% 80% at 20% 0%, #f07824 0%, transparent 55%)",
         }}
       />
-      <div className="pointer-events-none absolute left-[5%] top-[8%] select-none font-wordmark text-[90px] leading-[0.8] tracking-[-0.04em] text-transparent [-webkit-text-stroke:2px_#2c2a29] sm:text-[180px] md:top-[12%] md:text-[280px] lg:text-[340px]">
+      <div className="pointer-events-none absolute left-[5%] top-[8%] select-none font-wordmark text-[90px] leading-[0.8] tracking-[-0.04em] text-transparent [-webkit-text-stroke:2px_#707070] sm:text-[180px] md:top-[12%] md:text-[280px] lg:text-[340px]">
         {siteConfig.site.nameEn}
       </div>
 
@@ -53,10 +53,10 @@ export async function Hero() {
             />
           </div>
           <div
-            className="pointer-events-none absolute -bottom-3.5 left-1/2 h-[26px] w-[62%] -translate-x-1/2 animate-sitrin-glow rounded-full"
+            className="pointer-events-none absolute -bottom-3.5 left-1/2 h-[26px] w-[62%] -translate-x-[25%] animate-sitrin-shadow rounded-full"
             style={{
               background:
-                "radial-gradient(50% 50% at 50% 50%, #C61E1C 0%, transparent 70%)",
+                "radial-gradient(50% 50% at 50% 50%, #707070 0%, transparent 70%)",
             }}
           />
         </div>

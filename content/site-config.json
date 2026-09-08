@@ -17,15 +17,15 @@
   },
   "theme": {
     "_comment": "این رنگ‌ها فقط برای مستندسازی‌اند — منبع واقعی رنگ‌ها app/globals.css است. اگر این‌جا را تغییر دادید، globals.css را هم هماهنگ کنید.",
-    "background": "#030303",
-    "surface": "#111010",
-    "surfaceMuted": "#0B0A0A",
-    "border": "#2C2A29",
-    "foreground": "#FCFBFA",
-    "muted": "#A9A09E",
-    "brand": "#C61E1C",
-    "brandHover": "#D26660",
-    "brandMuted": "#640E0E"
+    "canvas": "#f7f7f7",
+    "surface": "#ffffff",
+    "surfaceSunken": "#eeeeee",
+    "border": "#d9d9d9",
+    "ink": "#202020",
+    "muted": "#707070",
+    "brand": "#f07824",
+    "brandHover": "#d65d0f",
+    "brandMuted": "#fff0e5"
   },
   "nav": [
     { "label": "خانه", "href": "/" },
@@ -79,7 +79,7 @@
     {
       "number": "۴",
       "title": "پشتیبانی واقعی",
-      "desc": "هر روز ۹ تا ۲۱، آدم واقعی جواب می‌دهد."
+      "desc": "هر روز ۹ تا ۲۱، پاسخگوی شما هستیم.."
     }
   ],
   "about": {
@@ -106,6 +106,11 @@
         "desc": "تعویض سایز رایگان است و پشتیبانی تا زمانی که مشکل حل نشود پیگیری می‌کند."
       }
     ]
+  },
+  "social": {
+    "instagram": "https://instagram.com/siitrin",
+    "telegram": "",
+    "whatsapp": "wa.me/+989360676565"
   },
   "footer": {
     "description": "اسنیکر اورجینال، ضمانت اصالت کالا و ارسال به سراسر ایران.",

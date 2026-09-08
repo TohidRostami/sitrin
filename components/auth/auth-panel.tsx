@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PhoneOtpDialog } from "@/components/auth/phone-otp-dialog";
+import { ProductImage } from "../shared/product-image";
+import { listActiveHeroImages } from "@/lib/queries/settings";
 
-export function AuthPanel({
+export async function AuthPanel({
   mode,
   next,
   children,
@@ -12,34 +14,42 @@ export function AuthPanel({
   children: React.ReactNode;
 }) {
   const isLogin = mode === "login";
-
+  const [heroImages] = await Promise.all([listActiveHeroImages()]);
   return (
     <main className="grid min-h-[calc(100vh-67px)] grid-cols-1 lg:grid-cols-2">
       <div
-        className="relative hidden min-h-[220px] items-end overflow-hidden bg-surface-sunken lg:flex"
-        style={{ background: "linear-gradient(135deg, #640E0E, #111010)" }}
+        className="relative flex flex-col hidden min-h-[220px] items-end overflow-hidden bg-surface-sunken lg:flex"
+        style={{ background: "linear-gradient(135deg, #f07824, #707070)" }}
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-canvas via-canvas/20 to-transparent" />
-        <div className="relative p-10">
+        <div className="relative aspect-square w-full overflow-hidden rounded-[24px]">
+          <ProductImage
+            src={heroImages[0]?.url}
+            alt="عکس اصلی سیترین"
+            className="scale-75 object-contain -rotate-45"
+          />
+        </div>
+        <div className="relative w-full  p-10">
           <div className="font-wordmark text-[38px] leading-[1.05] tracking-[-0.02em]">
             JOIN THE
             <br />
             <span className="text-brand">SITRIN CLUB</span>
           </div>
           <p className="mt-3.5 max-w-[38ch] text-sm leading-8 text-muted">
-            دسترسی زودهنگام به دراپ‌ها، تخفیف‌های اختصاصی و ارسال رایگان برای اعضا.
+            دسترسی زودهنگام به دراپ‌ها، تخفیف‌های اختصاصی و ارسال رایگان برای
+            اعضا.
           </p>
         </div>
       </div>
 
-      <div className="flex items-center justify-center px-4 py-10 sm:px-6 md:px-10 md:py-14">
+      <div className="flex items-center justify-center px-4 py-10 sm:px-6 md:px-10">
         <div className="w-full max-w-[400px]">
           <div className="mb-7 flex rounded-2xl border border-border bg-surface p-1.5">
             <Link
               href={`/login${next !== "/account" ? `?next=${encodeURIComponent(next)}` : ""}`}
               className={cn(
                 "flex-1 rounded-xl py-2.5 text-center text-sm font-bold transition-colors",
-                isLogin ? "bg-brand text-ink" : "text-muted"
+                isLogin ? "bg-brand text-ink" : "text-muted",
               )}
             >
               ورود
@@ -48,7 +58,7 @@ export function AuthPanel({
               href={`/register${next !== "/account" ? `?next=${encodeURIComponent(next)}` : ""}`}
               className={cn(
                 "flex-1 rounded-xl py-2.5 text-center text-sm font-bold transition-colors",
-                !isLogin ? "bg-brand text-ink" : "text-muted"
+                !isLogin ? "bg-brand text-ink" : "text-muted",
               )}
             >
               ثبت‌نام
@@ -59,7 +69,9 @@ export function AuthPanel({
             {isLogin ? "خوش برگشتی" : "حساب بساز"}
           </h1>
           <p className="mb-6.5 text-sm text-muted">
-            {isLogin ? "برای ادامه وارد حساب کاربری خود شوید." : "در کمتر از یک دقیقه عضو باشگاه سیترین شو."}
+            {isLogin
+              ? "برای ادامه وارد حساب کاربری خود شوید."
+              : "در کمتر از یک دقیقه عضو باشگاه سیترین شو."}
           </p>
 
           {children}

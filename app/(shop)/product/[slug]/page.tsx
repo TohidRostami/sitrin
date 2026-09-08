@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/shared/product-card";
 import { ProductPurchasePanel } from "@/components/shop/product-purchase-panel";
 import { ReviewsSection } from "@/components/shop/reviews-section";
 import { getProductBySlug, getRelatedProducts } from "@/lib/queries/products";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -20,7 +21,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
@@ -55,13 +60,22 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         ratingCount={product.ratingCount}
       />
 
-      
-
       {related.length > 0 && (
         <section className="mt-16 border-t border-border pt-10">
-          <h2 className="mb-6 text-2xl font-black">محصولات مشابه</h2>
+          {/* <h2 className="mb-6 text-2xl font-black"></h2> */}
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-4">
+            <h2 className="text-[26px] font-black tracking-tight md:text-[34px]">
+              محصولات مشابه
+            </h2>
+            <Link
+              href={`/shop?category=${product.category.slug}`}
+              className="text-sm font-semibold text-muted hover:text-brand-hover"
+            >
+              مشاهده همه
+            </Link>
+          </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {related.map((p) => (
+            {related.slice(0, 4).map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>

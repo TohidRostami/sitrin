@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { X } from "lucide-react";
 import { formatNumber } from "@/lib/format";
 import { buildShopHref, toggleSize, type ShopSearchParams } from "@/lib/shop-query";
+import { TransitionLink } from "../shared/transition-link";
 
 export function ActiveFilterChips({
   current,
@@ -33,13 +33,13 @@ export function ActiveFilterChips({
   return (
     <div className="flex flex-wrap gap-2">
       {chips.map((chip) => (
-        <Link
+        <TransitionLink
           key={chip.label}
           href={chip.href}
           className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3.5 py-1.5 text-[12.5px] text-muted"
         >
           {chip.label} <X className="h-3 w-3 text-brand" />
-        </Link>
+        </TransitionLink>
       ))}
     </div>
   );

@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import { Wallet, ShoppingBag, Package, Users } from "lucide-react";
 
 import { StatCard } from "@/components/admin/stat-card";
-import { OrderStatusChart } from "@/components/admin/order-status-chart";
-import { RecentOrdersTable } from "@/components/admin/recent-orders-table";
-import { getDashboardStats, getRecentOrders } from "@/lib/queries/admin";
+import { getDashboardStats } from "@/lib/queries/admin";
 import { formatPrice } from "@/lib/format";
+import { OutOfStockCard } from "@/components/admin/out-of-stock-card";
+import { getOutOfStockProducts } from "@/lib/queries/admin-inventory";
 
 export const metadata: Metadata = { title: "داشبورد | پنل مدیریت" };
 
 export default async function AdminDashboardPage() {
-  const [stats, recentOrders] = await Promise.all([
+  const [stats, outOfStockProducts] = await Promise.all([
     getDashboardStats(),
-    getRecentOrders(8),
+    getOutOfStockProducts(),
   ]);
 
   return (
@@ -20,7 +20,7 @@ export default async function AdminDashboardPage() {
       <div>
         <h1 className="text-2xl font-bold">داشبورد</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          نمای کلی فروشگاه هاشور
+          نمای کلی فروشگاه سیترین
         </p>
       </div>
 
@@ -44,21 +44,7 @@ export default async function AdminDashboardPage() {
         <StatCard label="مشتریان" value={stats.customerCount} icon={Users} />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <div className="rounded-lg border border-border p-6 lg:col-span-2">
-          <h2 className="text-sm font-medium">وضعیت سفارش‌ها</h2>
-          <OrderStatusChart statusCounts={stats.statusCounts} />
-        </div>
-
-        <div className="rounded-lg border border-border py-6 lg:col-span-3">
-          <div className="text-center border-b pb-3">
-            <h2 className="px-6 text-sm font-medium">سفارش‌های اخیر</h2>
-          </div>
-          <div>
-            <RecentOrdersTable orders={recentOrders} />
-          </div>
-        </div>
-      </div>
+      <OutOfStockCard products={outOfStockProducts} />
     </div>
   );
 }

@@ -18,6 +18,7 @@ import {
 import { formatNumber } from "@/lib/format";
 import { MobileProductFilters } from "@/components/shop/mobile-product-filters";
 import { SortOption } from "@/lib/product-constants";
+import { TransitionRegion } from "@/components/shared/transition-region";
 
 const SORTS: { value: SortOption; label: string }[] = [
   { value: "newest", label: "جدیدترین" },
@@ -86,11 +87,13 @@ export default async function ShopPage({
             />
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-                {items.map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
-              </div>
+              <TransitionRegion className="rounded-2xl">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+                  {items.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                  ))}
+                </div>
+              </TransitionRegion>
               <Pagination
                 page={page}
                 pageCount={pageCount}

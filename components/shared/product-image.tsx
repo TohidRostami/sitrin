@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-function SneakerPlaceholderIcon({ className }: { className?: string }) {
+export function SneakerPlaceholderIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 120 120"
@@ -66,6 +66,7 @@ export function ProductImage({
       src={src}
       alt={alt}
       fill
+      loading="lazy"
       sizes={sizes}
       className={cn("object-cover", className)}
     />

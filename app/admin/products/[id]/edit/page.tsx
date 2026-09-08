@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductForm } from "@/components/admin/product-form";
-import { getAllCategories, getProductForEdit } from "@/lib/queries/admin-products";
+import {
+  getAllCategories,
+  getProductForEdit,
+} from "@/lib/queries/admin-products";
 import { getAllSizes } from "@/lib/queries/admin-sizes";
 
 export const metadata: Metadata = { title: "ویرایش محصول | پنل مدیریت" };
@@ -17,7 +20,7 @@ export default async function EditProductPage({
     getAllSizes(),
     getProductForEdit(id),
   ]);
-
+  
   if (!product) notFound();
 
   return (

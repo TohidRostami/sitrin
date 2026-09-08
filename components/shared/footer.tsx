@@ -1,11 +1,6 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { toast } from "sonner";
 import { Logo } from "@/components/shared/logo";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { FaInstagram, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { siteConfig } from "@/lib/content";
 
 export function Footer() {
@@ -18,17 +13,31 @@ export function Footer() {
             <p className="max-w-[32ch] text-[13px] leading-7 text-muted">
               {siteConfig.footer.description}
             </p>
+            <div className="flex items-center gap-4 pt-1 text-sm">
+              <Link
+                href={siteConfig.social.instagram}
+                className="text-black underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                <FaInstagram size={30} />
+              </Link>
+              <Link
+                href={siteConfig.social.whatsapp}
+                className="text-black underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                <FaWhatsapp size={30} />
+              </Link>
+            </div>
           </div>
 
           {siteConfig.footer.columns.map((col) => (
             <div key={col.title}>
-              <div className="mb-4 text-[13px] font-extrabold">{col.title}</div>
+              <div className="mb-4 text-[17px] font-extrabold">{col.title}</div>
               <div className="flex flex-col gap-2.5">
                 {col.links.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-[13px] text-muted transition-colors hover:text-brand-hover"
+                    className="text-[16px] text-muted transition-colors hover:text-brand-hover"
                   >
                     {link.label}
                   </Link>

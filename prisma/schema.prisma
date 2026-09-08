@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -15,6 +14,7 @@ datasource db {
 enum Role {
   CUSTOMER
   ADMIN
+  SUBADMIN
 }
 
 model User {
@@ -59,7 +59,6 @@ model Session {
 // Credential (email+password) and future OAuth accounts both live here,
 // matching Better Auth's convention — providerId "credential" for the
 // email/password flow.
-
 model Account {
   id                    String    @id @default(cuid())
   userId                String
@@ -129,6 +128,7 @@ model Product {
   // soft delete: a product with even one past order can't be hard-deleted
   // (OrderItem references it) — it gets archived instead.
   isArchived      Boolean  @default(false)
+  inStock         Boolean  @default(true)
   metaTitle       String?
   metaDescription String?
   createdAt       DateTime @default(now())
@@ -143,6 +143,7 @@ model Product {
 
   @@index([categoryId])
   @@index([isPublished, isFeatured])
+  @@index([isPublished, inStock])
   @@index([createdAt])
   @@map("product")
 }
@@ -150,7 +151,6 @@ model Product {
 // A product's colors are entered fresh on that product's own form (no
 // shared cross-product palette, unlike Size) — so this is scoped to one
 // product and cascade-deletes with it, the same as ProductImage.
-
 model Color {
   id        String   @id @default(cuid())
   productId String
@@ -173,7 +173,6 @@ model Color {
 // Each image belongs to at most one color (colorId is null only for
 // legacy/generic images not tied to a specific color) — the storefront
 // filters this list by the selected color to swap photos.
-
 model ProductImage {
   id        String  @id @default(cuid())
   productId String
@@ -219,7 +218,6 @@ model ProductVariant {
 // then reusable across any future product, since different garment types
 // need different size sets (S/M/L for shirts, 38-46 for shoes, etc).
 // Colors, unlike sizes, are NOT shared this way — see the Color model.
-
 model Size {
   id          String   @id @default(cuid())
   name        String   @unique
@@ -285,7 +283,6 @@ enum OrderStatus {
 
 // paymentRef / gateway fields stay generic on purpose — this is the seam
 // where the real payment gateway plugs in later (see lib/payment/).
-
 model Order {
   id             String      @id @default(cuid())
   orderNumber    String      @unique
@@ -376,7 +373,6 @@ model SiteSetting {
 
 // Multiple hero images so the homepage banner can rotate — admin-managed
 // from /admin/settings, independent of any single product or category.
-
 model HeroImage {
   id        String   @id @default(cuid())
   url       String

@@ -12,6 +12,7 @@ import { CategoryWithCountDTO } from "@/lib/types";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { toPersianDigits } from "@/lib/format";
+import { SearchDialog } from "../shop/search-dialog";
 
 export function Header({ categories }: { categories: CategoryWithCountDTO[] }) {
   const pathname = usePathname();
@@ -19,7 +20,7 @@ export function Header({ categories }: { categories: CategoryWithCountDTO[] }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-canvas/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-5 px-4 py-3.5 sm:px-6 md:px-10">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-5 px-4 sm:px-6 md:px-10">
         <div className="flex flex-shrink-0 items-center gap-3">
           <MobileMenuSheet categories={categories} />
           <Logo />
@@ -112,6 +113,7 @@ export function Header({ categories }: { categories: CategoryWithCountDTO[] }) {
         </nav>
 
         <div className="flex flex-shrink-0 items-center gap-2">
+          <SearchDialog />
           <ProfileButton />
           <CartBadge />
         </div>

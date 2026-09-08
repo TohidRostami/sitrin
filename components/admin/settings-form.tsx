@@ -125,12 +125,12 @@ export function SettingsForm({
           <Label htmlFor="shippingCost">هزینه ارسال استاندارد (تومان)</Label>
           <Input
             id="shippingCost"
-            type="number"
+            thousandSeparator
             dir="ltr"
             min={0}
             value={standardShippingCost}
             onChange={(e) => setStandardShippingCost(e.target.value)}
-            className="text-end appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="text-end"
           />
         </div>
 
@@ -140,13 +140,13 @@ export function SettingsForm({
           </Label>
           <Input
             id="freeThreshold"
-            type="number"
+            thousandSeparator
             dir="ltr"
             min={0}
             placeholder="خالی = بدون ارسال رایگان"
             value={freeShippingThreshold}
             onChange={(e) => setFreeShippingThreshold(e.target.value)}
-            className="text-end appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="text-end"
           />
         </div>
       </div>

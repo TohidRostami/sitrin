@@ -1,5 +1,4 @@
 import { Footer } from "@/components/shared/footer";
-import { MobileBottomNav } from "@/components/shared/mobile-bottom-nav";
 import { ServerHeader } from "@/components/shared/ServerHeader";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -8,7 +7,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <ServerHeader />
       <div className="flex-1">{children}</div>
       <Footer />
-      <MobileBottomNav />
     </div>
   );
 }

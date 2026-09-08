@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouteTransition } from "@/components/shared/route-transition-provider";
 import { Search, X } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -18,7 +19,7 @@ type ProductsFiltersProps = {
 };
 
 export function ProductsFilters({ categories }: ProductsFiltersProps) {
-  const router = useRouter();
+  const { push } = useRouteTransition();
   const searchParams = useSearchParams();
 
   const [search, setSearch] = React.useState(
@@ -43,7 +44,7 @@ export function ProductsFilters({ categories }: ProductsFiltersProps) {
     // products) — always land back on page 1.
     params.delete("page");
 
-    router.push(`/admin/products?${params.toString()}`);
+    push(`/admin/products?${params.toString()}`);
   }
 
   function handleSearchSubmit(e: React.FormEvent) {
@@ -53,7 +54,7 @@ export function ProductsFilters({ categories }: ProductsFiltersProps) {
 
   function clearFilters() {
     setSearch("");
-    router.push("/admin/products");
+    push("/admin/products");
   }
 
   // "page" alone (no real filter) shouldn't count as an active filter.

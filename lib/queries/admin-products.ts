@@ -95,10 +95,14 @@ export async function getProductForEdit(
     where: { id },
     include: {
       category: true,
-      images: true,
+      images: { orderBy: { sortOrder: "asc" } },
+      colors: { orderBy: { sortOrder: "asc" } },
       variants: {
-        include: { size: true },
-        orderBy: { size: { sortOrder: "asc" } },
+        include: { size: true, color: true },
+        orderBy: [
+          { color: { sortOrder: "asc" } },
+          { size: { sortOrder: "asc" } },
+        ],
       },
     },
   });

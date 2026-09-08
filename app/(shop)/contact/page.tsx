@@ -30,7 +30,7 @@ export default async function ContactPage() {
             </div>
           ))}
           <div className="relative h-[190px] overflow-hidden rounded-[18px] border border-border">
-            <ProductImage src={heroImages[0]?.url} alt="نشانی فروشگاه سیترین" />
+            <ProductImage src={heroImages[0]?.url} alt="نشانی فروشگاه سیترین"  className="object-contain"/>
           </div>
         </div>
 

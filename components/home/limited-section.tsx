@@ -25,7 +25,7 @@ export async function LimitedSection({
       <div
         className="grid grid-cols-1 items-center overflow-hidden rounded-[26px] border border-border md:grid-cols-2"
         style={{
-          background: "linear-gradient(110deg, #640E0E 0%, #111010 58%)",
+          background: "linear-gradient(110deg, #f07824 0%, #eeeeee 58%)",
         }}
       >
         <div className="p-7 md:p-14">

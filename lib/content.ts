@@ -43,6 +43,7 @@ export type SiteConfig = {
     stats: { value: string; label: string }[];
     values: { title: string; desc: string }[];
   };
+  social: Record<string, string>;
   footer: {
     description: string;
     columns: { title: string; links: LinkItem[] }[];
