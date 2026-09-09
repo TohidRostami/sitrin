@@ -19,7 +19,7 @@ export type AdminProductsResult = {
   perPage: number;
 };
 
-export const ADMIN_PRODUCTS_PER_PAGE = 10;
+const ADMIN_PRODUCTS_PER_PAGE = 10;
 
 export async function getAllProductsForAdmin(
   filters: ProductFilters = {},

@@ -16,7 +16,9 @@ export function ProductGallery({
   productName: string;
 }) {
   const filtered = useMemo(() => {
-    const byColor = selectedColorId ? images.filter((i) => i.colorId === selectedColorId) : [];
+    const byColor = selectedColorId
+      ? images.filter((i) => i.colorId === selectedColorId)
+      : [];
     return byColor.length > 0 ? byColor : images;
   }, [images, selectedColorId]);
 
@@ -26,7 +28,12 @@ export function ProductGallery({
   return (
     <div>
       <div className="relative aspect-square overflow-hidden rounded-[24px] border border-border bg-surface">
-        <ProductImage src={activeImage?.url} alt={activeImage?.alt ?? productName} sizes="(min-width: 1024px) 40vw, 90vw" />
+        <ProductImage
+          src={activeImage?.url}
+          alt={activeImage?.alt ?? productName}
+          sizes="(min-width: 1024px) 40vw, 90vw"
+          priority
+        />
       </div>
       {filtered.length > 1 && (
         <div className="mt-3 grid grid-cols-4 gap-2.5">
@@ -36,10 +43,14 @@ export function ProductGallery({
               onClick={() => setActive(i)}
               className={cn(
                 "relative aspect-square overflow-hidden rounded-[14px] border bg-surface",
-                i === active ? "border-brand" : "border-border"
+                i === active ? "border-brand" : "border-border",
               )}
             >
-              <ProductImage src={img.url} alt={img.alt ?? productName} sizes="120px" />
+              <ProductImage
+                src={img.url}
+                alt={img.alt ?? productName}
+                sizes="120px"
+              />
             </button>
           ))}
         </div>

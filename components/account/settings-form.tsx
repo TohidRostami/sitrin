@@ -37,8 +37,11 @@ export function SettingsForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-[20px] border border-border bg-surface p-6">
-      <div className="mb-5 text-base font-extrabold">تنظیمات حساب</div>
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-[20px] border border-border bg-surface p-6"
+    >
+      <h1 className="mb-5 text-base font-extrabold">تنظیمات حساب</h1>
 
       <div className="mb-4">
         <Label>نام و نام خانوادگی</Label>
@@ -54,10 +57,17 @@ export function SettingsForm({
         <div className="mb-5">
           <Label>شماره موبایل</Label>
           <div className="flex items-center gap-2.5">
-            <Input dir="ltr" className="text-left" value={phoneNumber} disabled />
+            <Input
+              dir="ltr"
+              className="text-left"
+              value={phoneNumber}
+              disabled
+            />
             <span
               className={`whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold ${
-                phoneNumberVerified ? "bg-brand/[0.14] text-brand-hover" : "bg-border text-muted"
+                phoneNumberVerified
+                  ? "bg-brand/[0.14] text-brand-hover"
+                  : "bg-border text-muted"
               }`}
             >
               {phoneNumberVerified ? "تأیید‌شده" : "تأیید‌نشده"}

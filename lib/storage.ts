@@ -82,7 +82,3 @@ export function keyFromUrl(url: string): string | null {
     return null;
   }
 }
-
-export function isArvanConfigured(): boolean {
-  return isConfigured();
-}

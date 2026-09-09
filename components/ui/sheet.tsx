@@ -10,15 +10,15 @@ function Sheet(props: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
-function SheetTrigger(props: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
+function SheetTrigger(
+  props: React.ComponentProps<typeof SheetPrimitive.Trigger>,
+) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
-function SheetClose(props: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
-}
-
-function SheetPortal(props: React.ComponentProps<typeof SheetPrimitive.Portal>) {
+function SheetPortal(
+  props: React.ComponentProps<typeof SheetPrimitive.Portal>,
+) {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
@@ -31,7 +31,7 @@ function SheetOverlay({
       data-slot="sheet-overlay"
       className={cn(
         "fixed inset-0 z-50 bg-primary/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -61,7 +61,7 @@ function SheetContent({
             "inset-x-0 top-0 h-auto border-b border-border data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
           side === "bottom" &&
             "inset-x-0 bottom-0 h-auto border-t border-border data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-          className
+          className,
         )}
         {...props}
       >
@@ -98,25 +98,4 @@ function SheetTitle({
   );
 }
 
-function SheetDescription({
-  className,
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Description>) {
-  return (
-    <SheetPrimitive.Description
-      data-slot="sheet-description"
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  );
-}
-
-export {
-  Sheet,
-  SheetTrigger,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-};
+export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle };

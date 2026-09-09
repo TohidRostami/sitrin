@@ -3,7 +3,10 @@ import { getServerSession } from "@/lib/session";
 import { AuthPanel } from "@/components/auth/auth-panel";
 import { LoginForm } from "@/components/auth/login-form";
 
-export const metadata = { title: "ورود" };
+export const metadata = {
+  title: "ورود",
+  robots: { index: false, follow: true },
+};
 
 export default async function LoginPage({
   searchParams,

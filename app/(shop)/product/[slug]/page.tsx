@@ -4,7 +4,9 @@ import { Breadcrumb } from "@/components/shared/breadcrumb";
 import { ProductCard } from "@/components/shared/product-card";
 import { ProductPurchasePanel } from "@/components/shop/product-purchase-panel";
 import { ReviewsSection } from "@/components/shop/reviews-section";
+import { ProductJsonLd } from "@/components/shared/product-json-ld";
 import { getProductBySlug, getRelatedProducts } from "@/lib/queries/products";
+import { siteConfig } from "@/lib/content";
 import Link from "next/link";
 
 export async function generateMetadata({
@@ -15,9 +17,31 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
+
+  const title = product.metaTitle || product.name;
+  const description =
+    product.metaDescription || product.description.slice(0, 160);
+  const image = product.images[0]?.url;
+
   return {
-    title: product.metaTitle || product.name,
-    description: product.metaDescription || product.description.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical: `/product/${slug}` },
+    openGraph: {
+      type: "website",
+      url: `${siteConfig.site.url}/product/${slug}`,
+      title,
+      description,
+      images: image
+        ? [{ url: image, width: 1200, height: 1200, alt: product.name }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
   };
 }
 
@@ -31,9 +55,21 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const related = await getRelatedProducts(product.categoryId, product.id, 4);
+  const inStock = product.variants.some((v) => v.stock > 0);
 
   return (
     <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 md:px-10 md:py-12">
+      <ProductJsonLd
+        name={product.name}
+        description={product.description}
+        slug={product.slug}
+        sku={product.sku ?? product.id}
+        images={product.images.map((i) => i.url)}
+        price={product.price}
+        inStock={inStock}
+        ratingAverage={product.ratingAverage}
+        ratingCount={product.ratingCount}
+      />
       <Breadcrumb
         items={[
           { label: "خانه", href: "/" },

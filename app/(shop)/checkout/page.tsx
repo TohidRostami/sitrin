@@ -3,7 +3,10 @@ import { getServerSession } from "@/lib/session";
 import { listAddressesForUser } from "@/lib/queries/addresses";
 import { CheckoutForm } from "@/components/shop/checkout-form";
 
-export const metadata = { title: "تسویه حساب" };
+export const metadata = {
+  title: "تسویه حساب",
+  robots: { index: false, follow: true },
+};
 
 export default async function CheckoutPage() {
   const session = await getServerSession();
@@ -13,7 +16,9 @@ export default async function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-8 sm:px-6 md:px-10 md:py-12">
-      <h1 className="mb-2 text-[28px] font-black tracking-tight md:text-[38px]">تسویه حساب</h1>
+      <h1 className="mb-2 text-[28px] font-black tracking-tight md:text-[38px]">
+        تسویه حساب
+      </h1>
       <div className="mb-7 flex items-center gap-2.5 text-[13px]">
         <span className="flex items-center gap-2 text-brand-hover">
           <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full border border-brand bg-brand font-extrabold text-ink">

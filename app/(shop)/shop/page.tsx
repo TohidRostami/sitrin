@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FilterSidebar } from "@/components/shop/filter-sidebar";
 import { SortSelect } from "@/components/shop/sort-select";
 import { ActiveFilterChips } from "@/components/shop/active-filter-chips";
@@ -27,7 +28,29 @@ const SORTS: { value: SortOption; label: string }[] = [
   { value: "price-desc", label: "گران‌ترین" },
 ];
 
-export const metadata = { title: "فروشگاه" };
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<ShopSearchParams>;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const category = sp.category ? await getCategoryBySlug(sp.category) : null;
+
+  const title = category ? `${category.title} | فروشگاه` : "فروشگاه";
+  const description = category
+    ? `خرید ${category.title} اورجینال از سیترین — ${category.description ?? "با ضمانت اصالت کالا و ارسال سریع."}`
+    : "همه‌ی مدل‌های اسنیکر سیترین — دویدن، بسکتبال، لایف‌استایل، اسکیت و تمرین، با ضمانت اصالت کالا.";
+
+  // sort/page/min/max روی canonical نمی‌آید — این‌ها signal رتبه‌بندی جدایی
+  // ندارند، فقط باعث محتوای تکراری می‌شوند اگر جدا ایندکس شوند.
+  const canonical = category ? `/shop?category=${category.slug}` : "/shop";
+
+  return {
+    title,
+    description,
+    alternates: { canonical },
+  };
+}
 
 export default async function ShopPage({
   searchParams,

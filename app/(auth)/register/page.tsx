@@ -3,7 +3,10 @@ import { getServerSession } from "@/lib/session";
 import { AuthPanel } from "@/components/auth/auth-panel";
 import { RegisterForm } from "@/components/auth/register-form";
 
-export const metadata = { title: "ثبت‌نام" };
+export const metadata = {
+  title: "ثبت‌نام",
+  robots: { index: false, follow: true },
+};
 
 export default async function RegisterPage({
   searchParams,

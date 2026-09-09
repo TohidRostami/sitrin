@@ -10,7 +10,7 @@ export async function searchProductsAction(
   return searchProducts(query);
 }
 
-export async function searchProducts(
+async function searchProducts(
   query: string,
   take = 8,
 ): Promise<ProductDTO[]> {

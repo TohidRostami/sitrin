@@ -7,6 +7,7 @@ export type ShopSearchParams = {
   max?: string;
   sort?: string;
   page?: string;
+  sale?: string;
 };
 
 export function parseShopFilters(sp: ShopSearchParams) {
@@ -17,12 +18,19 @@ export function parseShopFilters(sp: ShopSearchParams) {
     maxPrice: sp.max ? Number(sp.max) : undefined,
     sort: (sp.sort as ProductSort) || "newest",
     page: sp.page ? Number(sp.page) : 1,
+    onSale: sp.sale === "1",
   };
 }
 
 /** merges the given overrides into the current params and returns a "/shop?..." href. صفحه‌بندی همیشه ریست می‌شود مگر خودِ page override شده باشد. */
-export function buildShopHref(current: ShopSearchParams, overrides: Partial<ShopSearchParams>) {
-  const next: Record<string, string> = { ...current, ...overrides } as Record<string, string>;
+export function buildShopHref(
+  current: ShopSearchParams,
+  overrides: Partial<ShopSearchParams>,
+) {
+  const next: Record<string, string> = { ...current, ...overrides } as Record<
+    string,
+    string
+  >;
   if (!("page" in overrides)) delete next.page;
 
   Object.keys(next).forEach((key) => {
@@ -34,5 +42,7 @@ export function buildShopHref(current: ShopSearchParams, overrides: Partial<Shop
 }
 
 export function toggleSize(current: string[], size: string): string[] {
-  return current.includes(size) ? current.filter((s) => s !== size) : [...current, size];
+  return current.includes(size)
+    ? current.filter((s) => s !== size)
+    : [...current, size];
 }

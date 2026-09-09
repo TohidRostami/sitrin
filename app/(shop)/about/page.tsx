@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { ProductImage } from "@/components/shared/product-image";
 import { siteConfig } from "@/lib/content";
 import { listActiveHeroImages } from "@/lib/queries/settings";
 
-export const metadata = { title: "درباره ما" };
+export const metadata: Metadata = {
+  title: "درباره ما",
+  description: siteConfig.about.body.slice(0, 160),
+  alternates: { canonical: "/about" },
+};
 
 export default async function AboutPage() {
   const heroImages = await listActiveHeroImages();

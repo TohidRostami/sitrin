@@ -29,7 +29,3 @@ export async function getCategories(): Promise<CategoryDTO[]> {
   const categories = await prisma.category.findMany({ orderBy: { sortOrder: "asc" } });
   return categories as unknown as CategoryDTO[];
 }
-
-export async function listAllCategories() {
-  return prisma.category.findMany({ orderBy: { sortOrder: "asc" } });
-}

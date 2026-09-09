@@ -1,8 +1,18 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { getServerSession } from "@/lib/session";
 import { AccountSidebar } from "@/components/account/account-sidebar";
 
-export default async function AccountLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "حساب کاربری",
+  robots: { index: false, follow: true },
+};
+
+export default async function AccountLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const session = await getServerSession();
   if (!session) redirect("/login?next=/account");
 

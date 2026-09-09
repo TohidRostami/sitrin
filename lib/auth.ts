@@ -61,5 +61,3 @@ export const auth = betterAuth({
     nextCookies(), // must stay last — see Better Auth's Next.js integration docs
   ],
 });
-
-export type Session = typeof auth.$Infer.Session;

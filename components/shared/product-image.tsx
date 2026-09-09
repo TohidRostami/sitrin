@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-export function SneakerPlaceholderIcon({ className }: { className?: string }) {
+function SneakerPlaceholderIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 120 120"
@@ -42,18 +42,22 @@ export function ProductImage({
   alt,
   className,
   sizes = "(min-width: 1024px) 25vw, 50vw",
+  priority = false,
 }: {
   src?: string | null;
   alt: string;
   className?: string;
   sizes?: string;
+  /** برای عکسی که بالای صفحه دیده می‌شود (هیرو، تصویر اصلی گالری محصول) —
+   * eager-load و preload می‌کند به‌جای lazy، چون معمولاً همان LCP صفحه است. */
+  priority?: boolean;
 }) {
   if (!src) {
     return (
       <div
         className={cn(
           "absolute inset-0 flex items-center justify-center bg-surface-sunken text-border",
-          className
+          className,
         )}
       >
         <SneakerPlaceholderIcon className="h-1/3 w-1/3 min-h-10 min-w-10" />
@@ -66,7 +70,7 @@ export function ProductImage({
       src={src}
       alt={alt}
       fill
-      loading="lazy"
+      {...(priority ? { priority: true } : { loading: "lazy" as const })}
       sizes={sizes}
       className={cn("object-cover", className)}
     />

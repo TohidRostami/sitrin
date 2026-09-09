@@ -50,6 +50,7 @@ export async function Hero() {
               src={heroImages[0]?.url}
               alt="عکس اصلی سیترین"
               className="object-contain -rotate-45"
+              priority
             />
           </div>
           <div

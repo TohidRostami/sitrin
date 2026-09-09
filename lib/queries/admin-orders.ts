@@ -60,7 +60,7 @@ export type AdminOrdersResult = {
   perPage: number;
 };
 
-export const ADMIN_ORDERS_PER_PAGE = 10;
+const ADMIN_ORDERS_PER_PAGE = 10;
 
 export async function getAllOrdersForAdmin(
   filters: AdminOrdersFilters = {},

@@ -29,7 +29,7 @@ export function AddressList({ addresses: initial }: { addresses: Address[] }) {
   return (
     <div className="rounded-[20px] border border-border bg-surface p-6">
       <div className="mb-5 flex items-center justify-between">
-        <div className="text-base font-extrabold">آدرس‌های من</div>
+        <h1 className="text-base font-extrabold">آدرس‌های من</h1>
         {!adding && (
           <Button size="sm" variant="secondary" onClick={() => setAdding(true)}>
             <Plus className="h-4 w-4" /> افزودن آدرس
@@ -45,7 +45,10 @@ export function AddressList({ addresses: initial }: { addresses: Address[] }) {
               setAdding(false);
             }}
           />
-          <button onClick={() => setAdding(false)} className="mt-3 text-xs text-muted hover:text-ink">
+          <button
+            onClick={() => setAdding(false)}
+            className="mt-3 text-xs text-muted hover:text-ink"
+          >
             انصراف
           </button>
         </div>
@@ -57,39 +60,57 @@ export function AddressList({ addresses: initial }: { addresses: Address[] }) {
         <div className="flex flex-col gap-3">
           {addresses.map((addr) =>
             editing === addr.id ? (
-              <div key={addr.id} className="rounded-2xl border border-border p-5">
+              <div
+                key={addr.id}
+                className="rounded-2xl border border-border p-5"
+              >
                 <AddressForm
                   addressId={addr.id}
                   defaultValues={addr}
                   onSuccess={(id, values) => {
-                    setAddresses((prev) => prev.map((a) => (a.id === id ? { id, ...values } : a)));
+                    setAddresses((prev) =>
+                      prev.map((a) => (a.id === id ? { id, ...values } : a)),
+                    );
                     setEditing(null);
                   }}
                 />
-                <button onClick={() => setEditing(null)} className="mt-3 text-xs text-muted hover:text-ink">
+                <button
+                  onClick={() => setEditing(null)}
+                  className="mt-3 text-xs text-muted hover:text-ink"
+                >
                   انصراف
                 </button>
               </div>
             ) : (
-              <div key={addr.id} className="flex items-start justify-between gap-3 rounded-2xl border border-border p-4">
+              <div
+                key={addr.id}
+                className="flex items-start justify-between gap-3 rounded-2xl border border-border p-4"
+              >
                 <div className="text-sm">
                   <div className="mb-1 font-bold">
                     {addr.fullName} · {addr.phone}
                   </div>
                   <div className="text-muted">
-                    {addr.province}، {addr.city}، {addr.addressLine} — {addr.postalCode}
+                    {addr.province}، {addr.city}، {addr.addressLine} —{" "}
+                    {addr.postalCode}
                   </div>
                 </div>
                 <div className="flex shrink-0 gap-1.5">
-                  <button onClick={() => setEditing(addr.id)} className="rounded-lg p-2 text-muted hover:bg-surface-sunken hover:text-ink">
+                  <button
+                    onClick={() => setEditing(addr.id)}
+                    className="rounded-lg p-2 text-muted hover:bg-surface-sunken hover:text-ink"
+                  >
                     <Pencil className="h-4 w-4" />
                   </button>
-                  <button onClick={() => handleDelete(addr.id)} className="rounded-lg p-2 text-muted hover:bg-surface-sunken hover:text-brand-hover">
+                  <button
+                    onClick={() => handleDelete(addr.id)}
+                    className="rounded-lg p-2 text-muted hover:bg-surface-sunken hover:text-brand-hover"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
-            )
+            ),
           )}
         </div>
       )}

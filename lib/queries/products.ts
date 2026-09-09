@@ -13,12 +13,18 @@ export type ProductListFilters = {
   sort?: ProductSort;
   page?: number;
   search?: string;
+  onSale?: boolean;
 };
 
 /** بج‌های روی کارت محصول — فقط از سیگنال‌های واقعی دیتابیس مشتق می‌شود
  * (isNew / compareAtPrice / isFeatured)؛ چیزی مثل «نسخه محدود» در schema
  * وجود ندارد، پس اینجا تولید نمی‌شود. */
-export function productTag(p: { isNew: boolean; isFeatured: boolean; price: number; compareAtPrice: number | null }) {
+export function productTag(p: {
+  isNew: boolean;
+  isFeatured: boolean;
+  price: number;
+  compareAtPrice: number | null;
+}) {
   if (p.compareAtPrice && p.compareAtPrice > p.price) {
     const pct = Math.round((1 - p.price / p.compareAtPrice) * 100);
     return { label: `٪${pct} تخفیف`, kind: "discount" as const };
@@ -37,10 +43,16 @@ const cardSelect = {
   isNew: true,
   isFeatured: true,
   category: { select: { title: true, slug: true } },
-  images: { orderBy: { sortOrder: "asc" as const }, take: 1, select: { url: true, alt: true } },
+  images: {
+    orderBy: { sortOrder: "asc" as const },
+    take: 1,
+    select: { url: true, alt: true },
+  },
 } satisfies Prisma.ProductSelect;
 
-export type ProductCardData = Prisma.ProductGetPayload<{ select: typeof cardSelect }>;
+export type ProductCardData = Prisma.ProductGetPayload<{
+  select: typeof cardSelect;
+}>;
 
 export async function listProducts(filters: ProductListFilters) {
   const page = Math.max(1, filters.page ?? 1);
@@ -65,6 +77,12 @@ export async function listProducts(filters: ProductListFilters) {
   if (filters.search) {
     where.name = { contains: filters.search };
   }
+  if (filters.onSale) {
+    // «حراج» = compareAtPrice ثبت شده. مقایسه‌ی «بیشتر از قیمت فعلی» را
+    // بعد از fetch در جاوااسکریپت انجام می‌دهیم (نه در where)، چون مقایسه‌ی
+    // دو ستون از یک ردیف در یک where ساده‌ی Prisma قابل‌اطمینان/پرتابل نیست.
+    where.compareAtPrice = { not: null };
+  }
 
   const orderBy: Prisma.ProductOrderByWithRelationInput[] = (() => {
     switch (filters.sort) {
@@ -79,6 +97,31 @@ export async function listProducts(filters: ProductListFilters) {
     }
   })();
 
+  // مسیر «حراج»: چون فیلتر دقیق (compareAtPrice > price) سمت دیتابیس امن
+  // نیست، همه‌ی نامزدها را می‌گیریم، در جاوااسکریپت دقیق فیلتر می‌کنیم و خودمان
+  // صفحه‌بندی می‌کنیم. برای یک فروشگاه با چند صد محصول این کاملاً کم‌هزینه است.
+  if (filters.onSale) {
+    const candidates = await prisma.product.findMany({
+      where,
+      orderBy,
+      select: cardSelect,
+    });
+    const onSaleItems = candidates.filter(
+      (p) => p.compareAtPrice !== null && p.compareAtPrice > p.price,
+    );
+    const total = onSaleItems.length;
+    const items = onSaleItems.slice(
+      (page - 1) * PAGE_SIZE,
+      (page - 1) * PAGE_SIZE + PAGE_SIZE,
+    );
+    return {
+      items,
+      total,
+      page,
+      pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)),
+    };
+  }
+
   const [items, total] = await Promise.all([
     prisma.product.findMany({
       where,
@@ -90,7 +133,12 @@ export async function listProducts(filters: ProductListFilters) {
     prisma.product.count({ where }),
   ]);
 
-  return { items, total, page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)) };
+  return {
+    items,
+    total,
+    page,
+    pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)),
+  };
 }
 
 export async function listFeaturedProducts(limit = 4) {
@@ -130,18 +178,29 @@ export async function getProductBySlug(slug: string) {
     : 0;
 
   // سایزهای موجود روی این محصول، صرف‌نظر از رنگ — برای نمایش دکمه‌های سایز.
-  const sizeMap = new Map<string, { id: string; name: string; inStock: boolean }>();
+  const sizeMap = new Map<
+    string,
+    { id: string; name: string; inStock: boolean }
+  >();
   for (const v of product.variants) {
     if (!v.size || sizeMap.has(v.size.id)) continue;
-    const inStock = product.variants.some((vv) => vv.sizeId === v.sizeId && vv.stock > 0);
+    const inStock = product.variants.some(
+      (vv) => vv.sizeId === v.sizeId && vv.stock > 0,
+    );
     sizeMap.set(v.size.id, { id: v.size.id, name: v.size.name, inStock });
   }
-  const sizeOptions = Array.from(sizeMap.values()).sort((a, b) => a.name.localeCompare(b.name, "fa"));
+  const sizeOptions = Array.from(sizeMap.values()).sort((a, b) =>
+    a.name.localeCompare(b.name, "fa"),
+  );
 
   return { ...product, ratingCount, ratingAverage, sizeOptions };
 }
 
-export async function getRelatedProducts(categoryId: string, excludeProductId: string, limit = 4) {
+export async function getRelatedProducts(
+  categoryId: string,
+  excludeProductId: string,
+  limit = 4,
+) {
   return prisma.product.findMany({
     where: {
       categoryId,
@@ -155,7 +214,11 @@ export async function getRelatedProducts(categoryId: string, excludeProductId: s
   });
 }
 
-export async function findVariant(productId: string, sizeId: string | null, colorId: string | null) {
+export async function findVariant(
+  productId: string,
+  sizeId: string | null,
+  colorId: string | null,
+) {
   return prisma.productVariant.findFirst({
     where: { productId, sizeId: sizeId ?? null, colorId: colorId ?? null },
   });

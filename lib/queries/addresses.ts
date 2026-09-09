@@ -6,7 +6,3 @@ export async function listAddressesForUser(userId: string) {
     orderBy: [{ isDefault: "desc" }, { createdAt: "desc" }],
   });
 }
-
-export async function getAddressById(id: string, userId: string) {
-  return prisma.address.findFirst({ where: { id, userId } });
-}
