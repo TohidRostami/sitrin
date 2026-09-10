@@ -5,15 +5,18 @@
   },
   "site": {
     "name": "سیترین",
-    "nameEn": "SITRIN",
+    "nameEn": "SIITRIN",
     "tagline": "اسنیکرهای اورجینال، انتخاب‌شده برای کسانی که ایستادن را بلد نیستند.",
     "url": "https://siitrin.com",
     "description": "فروشگاه اینترنتی سیترین — اسنیکر اورجینال با ضمانت اصالت کالا و ارسال به سراسر ایران.",
-    "phone": "۰۲۱ ۹۱۰۰ ۲۲۳۳",
-    "phoneE164": "+982191002233",
+    "phone": "۰۹۳۶۰۶۷۶۵۶۵",
+    "phoneE164": "+989360676565",
     "email": "hello@sitrin.ir",
-    "address": "تهران، خیابان ولیعصر، بالاتر از پارک‌وی، پلاک ۲۴۱۸",
-    "hours": "شنبه تا پنجشنبه، ۹ تا ۲۱"
+    "address": "مازندران، قائمشهر، مجتمع دریای نور، نبش ورودی اصلی، فروشگاه سیترین",
+    "hours": "شنبه تا پنجشنبه، ۹ تا ۲۳",
+    "mapUrl":"https://maps.app.goo.gl/SCSHigE3vfEMFJKF7",
+    "workingHours":"از ساعت ۹ صبح الی ۲۳ شب"
+    
   },
   "theme": {
     "_comment": "این رنگ‌ها فقط برای مستندسازی‌اند — منبع واقعی رنگ‌ها app/globals.css است. اگر این‌جا را تغییر دادید، globals.css را هم هماهنگ کنید.",
@@ -31,13 +34,15 @@
     { "label": "خانه", "href": "/" },
     { "label": "فروشگاه", "href": "/shop" },
     { "label": "دسته‌بندی‌ها", "href": "/categories" },
-    { "label": "درباره ما", "href": "/about" },
-    { "label": "تماس با ما", "href": "/contact" }
+    { "label": "تماس با ما", "href": "/contact" },
+    { "label": "درباره ما", "href": "/about" }
   ],
   "mobileTabs": [
     { "label": "خانه", "href": "/", "icon": "home" },
     { "label": "فروشگاه", "href": "/shop", "icon": "shop" },
-    { "label": "علاقه‌مندی", "href": "/account/favorites", "icon": "heart" }
+    { "label": "علاقه‌مندی", "href": "/account/favorites", "icon": "heart" },
+    { "label": "تماس با ما", "href": "/contact" },
+    { "label": "درباره ما", "href": "/about" }
   ],
   "home": {
     "heroBadge": "دراپ جدید پاییز ۱۴۰۵",
@@ -79,7 +84,7 @@
     {
       "number": "۴",
       "title": "پشتیبانی واقعی",
-      "desc": "هر روز ۹ تا ۲۱، پاسخگوی شما هستیم.."
+      "desc": "هر روز ۹ تا ۲۱، پاسخگوی شما هستیم."
     }
   ],
   "about": {

@@ -9,10 +9,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { label: "داشبورد", href: "/account" },
   { label: "سفارش‌های من", href: "/account/orders" },
-  { label: "علاقه‌مندی‌ها", href: "/account/favorites" },
   { label: "آدرس‌ها", href: "/account/addresses" },
-  { label: "کیف پول", href: "/account/wallet" },
-  { label: "تنظیمات", href: "/account/settings" },
 ];
 
 export function AccountSidebar({ name, subtitle }: { name: string; subtitle: string }) {
@@ -20,7 +17,7 @@ export function AccountSidebar({ name, subtitle }: { name: string; subtitle: str
   const router = useRouter();
 
   return (
-    <aside className="w-full max-w-[320px] flex-1 basis-[240px] rounded-[20px] border border-border bg-surface p-6">
+    <aside className="w-full  flex-1 basis-[240px] rounded-[20px] border border-border bg-surface p-6">
       <div className="mb-6 flex items-center gap-3.5">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-brand bg-surface-sunken text-lg font-black">
           {name.charAt(0)}

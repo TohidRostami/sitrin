@@ -9,6 +9,8 @@ import { Logo } from "@/components/shared/logo";
 import { siteConfig } from "@/lib/content";
 import { CategoryWithCountDTO } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { toPersianDigits } from "@/lib/format";
 
 export function MobileMenuSheet({
   categories,
@@ -18,6 +20,7 @@ export function MobileMenuSheet({
   const [open, setOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const { data: session } = useSession();
+  const pathname = usePathname();
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -37,63 +40,84 @@ export function MobileMenuSheet({
           </div>
 
           <nav className="flex flex-1 flex-col overflow-y-auto px-5 py-2">
-            {siteConfig.mobileTabs.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-between border-b border-border py-4 text-[15px] font-bold"
-              >
-                {item.label}
-                <ChevronLeft className="h-4 w-4 text-muted" />
-              </Link>
-            ))}
-            <button
-              type="button"
-              onClick={() => setCategoriesOpen((v) => !v)}
-              aria-expanded={categoriesOpen}
-              className="flex w-full items-center justify-between border-b border-border py-4 text-[15px] font-bold"
-            >
-              دسته‌بندی محصولات
-              <ChevronDown
-                className={cn(
-                  "mr-auto size-4 transition-transform duration-300 ease-out",
-                  categoriesOpen && "rotate-180",
-                )}
-                strokeWidth={1.6}
-              />
-            </button>
-            <div
-              className={cn(
-                "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
-                categoriesOpen
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0",
-              )}
-            >
-              <div className="min-h-0 overflow-hidden">
-                <div
+            {siteConfig.nav.map((item) => {
+              const active =
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.href);
+
+              return item.label === "دسته‌بندی‌ها" ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setCategoriesOpen((v) => !v)}
+                    aria-expanded={categoriesOpen}
+                    className={cn(
+                      "flex items-center justify-between rounded-full py-3 px-3 text-sm font-semibold",
+                      "transition-colors duration-200 hover:text-ink",
+                      active
+                        ? "bg-brand/[0.14] text-brand-hover"
+                        : "text-muted",
+                    )}
+                  >
+                    دسته‌بندی محصولات
+                    <ChevronDown
+                      className={cn(
+                        "mr-auto size-4 transition-transform duration-300 ease-out",
+                        categoriesOpen && "rotate-180",
+                      )}
+                      strokeWidth={1.6}
+                    />
+                  </button>
+                  <div
+                    className={cn(
+                      "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
+                      categoriesOpen
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0",
+                    )}
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <div
+                        className={cn(
+                          "flex flex-col gap-0.5 py-1 ps-3 transition-transform duration-300 ease-out",
+                          categoriesOpen ? "translate-y-0" : "-translate-y-2",
+                        )}
+                      >
+                        {categories.map((cat) => (
+                          <Link
+                            key={cat.slug}
+                            href={`/shop?category=${cat.slug}`}
+                            onClick={() => {
+                              setCategoriesOpen((v) => !v);
+                              setOpen(false);
+                            }}
+                            className="flex items-center justify-between rounded-full py-3 px-5 text-sm text-muted font-semibold"
+                          >
+                            <span>{cat.title}</span>
+                            <span>{toPersianDigits(cat.productCount)}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
                   className={cn(
-                    "flex flex-col gap-0.5 py-1 ps-3 transition-transform duration-300 ease-out",
-                    categoriesOpen ? "translate-y-0" : "-translate-y-2",
+                    "flex items-center justify-between rounded-full py-3 px-3 text-sm font-semibold",
+                    "transition-colors duration-200 hover:text-ink",
+                    active ? "bg-brand/[0.14] text-brand-hover" : "text-muted",
                   )}
                 >
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={`/shop?category=${cat.slug}`}
-                      onClick={() => {
-                        setCategoriesOpen((v) => !v);
-                        setOpen(false);
-                      }}
-                      className="flex items-center justify-between border-b border-border py-4 text-[15px] font-bold transition-colors duration-200 hover:text-brand"
-                    >
-                      {cat.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
+                  {item.label}
+                  <ChevronLeft className="h-4 w-4 text-muted" />
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex-shrink-0 px-5 pb-6 pt-4">
@@ -133,4 +157,3 @@ export function MobileMenuSheet({
     </DialogPrimitive.Root>
   );
 }
-// { "label": "پروفایل", "href": "/account", "icon": "user" }

@@ -86,17 +86,17 @@ export default async function ShopPage({
         <FilterSidebar current={sp} categories={categories} sizes={sizes} />
 
         <div className="min-w-0 flex-[999_1_420px]">
-          <div className="mb-4.5 flex flex-wrap items-center justify-between gap-3">
-            <ActiveFilterChips
-              current={sp}
-              categoryTitle={activeCategory?.title}
-            />
-            <SortSelect current={sp} />
+          <div className="mb-4.5 flex flex-col items-start justify-between gap-3">
+            <SortSelect current={sp}/>
             <MobileProductFilters
               categories={categories}
               sorts={SORTS}
               activeCategorySlug={filters.categorySlug}
               activeSort={filters.sort}
+            />
+            <ActiveFilterChips
+              current={sp}
+              categoryTitle={activeCategory?.title}
             />
           </div>
 

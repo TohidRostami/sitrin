@@ -40,7 +40,7 @@ export function MobileProductFilters({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:hidden">
+    <div className="grid grid-cols-2 gap-3 w-full lg:hidden">
       <div>
         <h2 className="mb-3 text-sm font-medium text-muted-foreground">
           دسته بندی‌ها:

@@ -15,6 +15,8 @@ export type SiteConfig = {
     email: string;
     address: string;
     hours: string;
+    mapUrl:string;
+    workingHours:string;
   };
   theme: Record<string, string>;
   nav: NavItem[];
