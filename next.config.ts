@@ -1,8 +1,17 @@
 import type { NextConfig } from "next";
 
-const arvanEndpoint = process.env.ARVAN_ENDPOINT
-  ? new URL(process.env.ARVAN_ENDPOINT).hostname
-  : undefined;
+function parseArvanHostname(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  try {
+    const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    return new URL(withProtocol).hostname;
+  } catch {
+    console.warn(`ARVAN_ENDPOINT       : "${value}"`);
+    return undefined;
+  }
+}
+
+const arvanEndpoint = parseArvanHostname(process.env.ARVAN_ENDPOINT);
 
 const securityHeaders = [
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -12,8 +21,6 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
   },
-  // HSTS only matters over HTTPS (which is how Vercel serves the site) —
-  // harmless locally since browsers ignore it on plain http://localhost.
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
@@ -22,9 +29,6 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // 'unsafe-inline' is only for the JSON-LD <script> tags on product
-      // pages; tighten this to a nonce-based policy if that script is
-      // ever removed.
       "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
@@ -43,11 +47,9 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      // ArvanCloud Object Storage (product images uploaded from /admin).
       ...(arvanEndpoint
         ? [{ protocol: "https" as const, hostname: arvanEndpoint }]
         : []),
-      // Fallback/dev buckets — safe to remove once ARVAN_ENDPOINT is set.
       { protocol: "https" as const, hostname: "*.arvanstorage.ir" },
       { protocol: "https" as const, hostname: "*.arvanstorage.com" },
     ],

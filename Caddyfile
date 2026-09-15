@@ -1,14 +1,7 @@
-# دامنه‌ی واقعی رو این‌جا بذار (هر دو حالت www و بدون www). Caddy خودش
-# گواهی SSL از Let's Encrypt می‌گیره و هر ۶۰ روز خودکار تمدید می‌کنه —
-# هیچ کار دستی دیگه‌ای لازم نیست.
-siitrin.com, www.siitrin.com {
+http://siitrin.com, http://www.siitrin.com {
     reverse_proxy app:3000
-
     encode gzip
-
     header {
-        # هدرهای امنیتی تکراری با next.config.ts رو این‌جا اضافه نمی‌کنیم؛
-        # اون‌ها از خودِ اپلیکیشن می‌آیند.
         -Server
     }
 }

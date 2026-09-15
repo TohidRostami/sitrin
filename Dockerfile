@@ -1,35 +1,38 @@
 # syntax=docker/dockerfile:1
 
-# ─── پایه‌ی مشترک ───────────────────────────────────────────────────
-# Debian (نه Alpine) چون schema-engine پریزما دقیقاً برای
-# "debian-openssl-3.0.x" کامپایل شده (توی خطاهای قبلی خودمون این رو با
-# چشم دیدیم) — bookworm همین نسخه‌ی OpenSSL رو داره. build-essential هم
-# برای کامپایل native module (better-sqlite3) اگر باینری از‌پیش‌ساخته‌شده
-# برای این پلتفرم پیدا نشد.
 FROM node:22-bookworm-slim AS base
 WORKDIR /app
+RUN rm -f /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources
+RUN echo "deb http://repo.iut.ac.ir/repo/debian bookworm main" > /etc/apt/sources.list \
+    && echo "deb http://mirror.arvancloud.ir/debian-security bookworm-security main" >> /etc/apt/sources.list
 RUN apt-get update && apt-get install -y --no-install-recommends \
       python3 make g++ openssl ca-certificates sqlite3 \
     && rm -rf /var/lib/apt/lists/*
+COPY schema-engine-bin /tmp/schema-engine
+RUN chmod +x /tmp/schema-engine
+ENV PRISMA_SCHEMA_ENGINE_BINARY=/tmp/schema-engine
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 
-# ─── مرحله‌ی نصب وابستگی‌ها ─────────────────────────────────────────
+COPY node-v22.23.2-headers.tar.gz /tmp/
+RUN mkdir -p /tmp/node-headers \
+    && tar -xzf /tmp/node-v22.23.2-headers.tar.gz -C /tmp/node-headers --strip-components=1
+ENV npm_config_nodedir=/tmp/node-headers
+
 FROM base AS deps
 COPY package.json package-lock.json ./
-# ‪--ignore-scripts‬ چون postinstall (prisma generate) به schema.prisma نیاز
-# داره که هنوز کپی نشده — عمداً جداگانه توی مرحله‌ی بعد صداش می‌زنیم.
-RUN npm ci --ignore-scripts
+COPY prisma.config.ts ./
+COPY prisma ./prisma
+RUN npm config set registry https://package-mirror.liara.ir/repository/npm/
+RUN npm ci
 
-# ─── مرحله‌ی بیلد ───────────────────────────────────────────────────
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
+ENV DATABASE_URL="file:/app/prisma/build-time.db"
+RUN npx prisma db push --accept-data-loss
 RUN npm run build
 
-# ─── مرحله‌ی اجرا ───────────────────────────────────────────────────
-# عمداً node_modules کامل (نه خروجی standalone/trim‌شده‌ی Next) رو نگه
-# می‌داریم، چون prisma db push و tsx (برای make-admin/seed) هم باید همین
-# داخل کانتینر قابل‌اجرا بمونن، نه فقط خودِ سرور Next.
 FROM base AS runner
 ENV NODE_ENV=production
 
@@ -37,7 +40,6 @@ RUN groupadd --system --gid 1001 nodejs \
     && useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY --from=builder /app ./
-# پوشه‌ای که فایل SQLite قراره داخلش (روی یک Docker volume) زندگی کنه.
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app
 
 USER nextjs

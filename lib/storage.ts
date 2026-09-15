@@ -14,7 +14,7 @@ let client: S3Client | null = null;
 function getClient(): S3Client {
   if (client) return client;
   client = new S3Client({
-    region: "default", // ArvanCloud ignores AWS regions but the SDK requires a value
+    region: "default",
     endpoint: process.env.ARVAN_ENDPOINT,
     credentials: {
       accessKeyId: process.env.ARVAN_ACCESS_KEY ?? "",
@@ -24,14 +24,14 @@ function getClient(): S3Client {
   return client;
 }
 
-/** Public URL for an object once uploaded with ACL: public-read. */
+function ensureProtocol(value: string): string {
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
 function publicUrl(key: string): string {
   const base = process.env.ARVAN_PUBLIC_URL_BASE;
-  if (base) return `${base.replace(/\/$/, "")}/${key}`;
+  if (base) return `${ensureProtocol(base).replace(/\/$/, "")}/${key}`;
 
-  // Virtual-hosted-style fallback: {bucket}.{endpoint-host}/{key} — matches
-  // ArvanCloud's default bucket URL pattern. Prefer ARVAN_PUBLIC_URL_BASE
-  // if you've set up a custom domain or CDN in front of the bucket.
   const bucket = process.env.ARVAN_BUCKET ?? "";
   const host = (process.env.ARVAN_ENDPOINT ?? "").replace(/^https?:\/\//, "");
   return `https://${bucket}.${host}/${key}`;
@@ -39,11 +39,6 @@ function publicUrl(key: string): string {
 
 export type UploadResult = { url: string; key: string };
 
-/**
- * Uploads a file to ArvanCloud Object Storage (see README → "اتصال
- * Object Storage آروان‌کلاد" for setup). Throws a Persian, user-facing
- * error message if the required env vars aren't set yet.
- */
 export async function uploadToArvan(
   buffer: Buffer,
   key: string,
@@ -51,7 +46,7 @@ export async function uploadToArvan(
 ): Promise<UploadResult> {
   if (!isConfigured()) {
     throw new Error(
-      "Object Storage آروان‌کلاد هنوز تنظیم نشده — متغیرهای ARVAN_ENDPOINT، ARVAN_BUCKET، ARVAN_ACCESS_KEY و ARVAN_SECRET_KEY را در .env قرار دهید (راهنما در README.md)."
+      "Object Storage       ARVAN_ENDPOINT ARVAN_BUCKET ARVAN_ACCESS_KEY  ARVAN_SECRET_KEY   .env   (  README.md)."
     );
   }
 
@@ -73,7 +68,6 @@ export async function deleteFromArvan(key: string): Promise<void> {
   await getClient().send(new DeleteObjectCommand({ Bucket: process.env.ARVAN_BUCKET, Key: key }));
 }
 
-/** Extracts the object key back out of a public URL, for deletes. */
 export function keyFromUrl(url: string): string | null {
   try {
     const { pathname } = new URL(url);

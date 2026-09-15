@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Archivo_Black } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/lib/content";
 import "./globals.css";
 
-const archivoBlack = Archivo_Black({
-  subsets: ["latin"],
+const archivoBlack = localFont({
+  src: "../public/fonts/ArchivoBlack-Regular.ttf",
   weight: "400",
   variable: "--font-archivo-black",
 });
