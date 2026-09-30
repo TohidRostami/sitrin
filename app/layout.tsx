@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     description: siteConfig.site.description,
     images: [
       {
-        url: "/sitrin_logo.png",
+        url: "/sitrin_logo.jpg",
         width: 1200,
         height: 1200,
         alt: siteConfig.site.name,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
     description: siteConfig.site.description,
-    images: ["/sitrin_logo.png"],
+    images: ["/sitrin_logo.jpg"],
   },
 };
 

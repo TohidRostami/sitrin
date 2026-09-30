@@ -52,10 +52,6 @@ export function Footer() {
             © {siteConfig.footer.copyrightYear} {siteConfig.site.name}. تمام
             حقوق محفوظ است.
           </div>
-          <div className="flex gap-4.5">
-            <span className="cursor-pointer">قوانین و مقررات</span>
-            <span className="cursor-pointer">حریم خصوصی</span>
-          </div>
         </div>
       </div>
     </footer>
