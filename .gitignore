@@ -21,5 +21,4 @@
 .DS_Store
 *.tsbuildinfo
 npm-debug.log*
-node-*-headers.tar.gz
 schema-engine-bin
