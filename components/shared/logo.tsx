@@ -12,7 +12,7 @@ export function Logo({
     <span className={cn("flex shrink-0 items-center gap-2.5", className)}>
       <Image
         alt="Sitrin Logo"
-        src={"/sitrin_logo.png"}
+        src={"/sitrin_logo.jpg"}
         width={90}
         height={90}
       />
