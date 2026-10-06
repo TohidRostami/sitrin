@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="border-t border-border bg-surface-sunken">
       <div className="mx-auto max-w-[1280px] px-4 py-10 sm:px-6 md:px-4 md:py-10">
         <div className="grid grid-cols-2 gap-10 py-12 sm:grid-cols-2 md:grid-cols-5">
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="sm:col-span-2 md`:col-span-1 lg:col-span-1">
             <Logo className="mb-4" />
             <p className="max-w-[32ch] text-[13px] leading-7 text-muted">
               {siteConfig.footer.description}

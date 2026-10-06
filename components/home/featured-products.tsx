@@ -19,7 +19,7 @@ export async function FeaturedProducts() {
               مشاهده همه
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-9 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-9 md:grid-cols-4 lg:grid-cols-4">
             {featured.slice(0, 4).map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

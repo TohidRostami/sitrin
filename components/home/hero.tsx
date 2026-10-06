@@ -20,7 +20,7 @@ export async function Hero() {
         {siteConfig.site.nameEn}
       </div>
 
-      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-9 px-4 py-8 sm:px-6 md:px-10 md:py-15 lg:grid-cols-2 lg:gap-16">
+      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-9 px-4 py-8 sm:px-6 md:px-10 md:py-15 md:grid-cols-2 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 animate-sitrin-rise lg:order-1">
           <h1 className="mb-5 text-[36px] font-black leading-[1.02] tracking-tight text-balance text-center sm:text-right sm:text-[56px] md:text-[72px] lg:text-[82px]">
             {siteConfig.home.heroTitleLine1}
@@ -44,12 +44,18 @@ export async function Hero() {
           </div>
         </div>
 
-        <div className="order-1 relative animate-sitrin-rise [animation-delay:150ms] lg:order-2">
+        <div className="order-1 md:order-2 relative animate-sitrin-rise [animation-delay:150ms] lg:order-2">
           <div className="relative aspect-square w-full overflow-hidden rounded-[24px] animate-sitrin-float">
             <ProductImage
               src={heroImages[0]?.url}
               alt="عکس اصلی سیترین"
-              className="object-contain -rotate-45"
+              className="
+                object-contain
+                -rotate-45
+                scale-[0.7]
+                md:scale-[0.9]
+                lg:scale-100
+              "
               priority
             />
           </div>

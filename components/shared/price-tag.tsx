@@ -22,7 +22,7 @@ export function PriceTag({
           <span className="px-1 hidden sm:flex">-</span>
         </>
       )}
-      <div className="flex flex-wrap">
+      <div className="flex">
       <span className="text-foreground">{formatToman(price)}</span>
       <span className="text-muted-foreground pr-1"> تومان</span>
       </div>
